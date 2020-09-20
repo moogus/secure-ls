@@ -98,6 +98,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _rc2 = _interopRequireDefault(_rc);
 	
+	var _windowOrGlobal = __webpack_require__(19);
+	
+	var _windowOrGlobal2 = _interopRequireDefault(_windowOrGlobal);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -127,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.config.isCompression = typeof config.isCompression !== 'undefined' ? config.isCompression : true;
 	    this.config.encodingType = typeof config.encodingType !== 'undefined' || config.encodingType === '' ? config.encodingType.toLowerCase() : _constants2.default.EncrytionTypes.BASE64;
 	
-	    this.ls = localStorage;
+	    this.ls = _windowOrGlobal2.default.localStorage;
 	    this.init();
 	  }
 	
@@ -3289,14 +3293,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	;(function (root, factory) {
+	;(function (root, factory, undef) {
 		if (true) {
 			// CommonJS
-			module.exports = exports = factory(__webpack_require__(5));
+			module.exports = exports = factory(__webpack_require__(5), __webpack_require__(14));
 		}
 		else if (typeof define === "function" && define.amd) {
 			// AMD
-			define(["./core"], factory);
+			define(["./core", "./evpkdf"], factory);
 		}
 		else {
 			// Global (browser)
@@ -3757,11 +3761,16 @@ return /******/ (function(modules) { // webpackBootstrap
 		                var modeCreator = mode.createEncryptor;
 		            } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
 		                var modeCreator = mode.createDecryptor;
-	
 		                // Keep at least one block in the buffer for unpadding
 		                this._minBufferSize = 1;
 		            }
-		            this._mode = modeCreator.call(mode, this, iv && iv.words);
+	
+		            if (this._mode && this._mode.__creator == modeCreator) {
+		                this._mode.init(this, iv && iv.words);
+		            } else {
+		                this._mode = modeCreator.call(mode, this, iv && iv.words);
+		                this._mode.__creator = modeCreator;
+		            }
 		        },
 	
 		        _doProcessBlock: function (words, offset) {
@@ -5280,6 +5289,17 @@ return /******/ (function(modules) { // webpackBootstrap
 		return CryptoJS.RC4;
 	
 	}));
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict'
+	module.exports = (typeof self === 'object' && self.self === self && self) ||
+	  (typeof global === 'object' && global.global === global && global) ||
+	  this
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }
 /******/ ])
