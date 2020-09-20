@@ -8,6 +8,7 @@ import AES from 'crypto-js/aes';
 import DES from 'crypto-js/tripledes';
 import RABBIT from 'crypto-js/rabbit';
 import RC4 from 'crypto-js/rc4';
+import root from 'window-or-global';
 
 export default class SecureLS {
   constructor(config) {
@@ -36,7 +37,7 @@ export default class SecureLS {
       config.encodingType.toLowerCase() :
       constants.EncrytionTypes.BASE64;
 
-    this.ls = localStorage;
+    this.ls = root.localStorage;
     this.init();
   };
 
